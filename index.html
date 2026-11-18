@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hop · Şehrin Keyfini Sür (Chatbot Demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#e8202a;--black:#000;--yellow:#e9f542;--bg:#f7f7f7;--text:#111}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:clip}
+html{scroll-behavior:smooth}
+body{font-family:"Sora",system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1400px;margin:0 auto;padding:0 32px}
+
+/* Header */
+header{background:#000;color:#fff;position:sticky;top:0;z-index:50;border-top:4px dashed #222}
+.nav{display:flex;align-items:center;height:96px;gap:40px}
+.logo{font-weight:700;font-size:44px;letter-spacing:-1px;line-height:1}
+.menu{display:flex;gap:40px;margin-left:80px;font-size:16px;font-weight:600}
+.menu a:hover{color:var(--red)}
+.right{margin-left:auto;display:flex;align-items:center;gap:20px}
+.langs{display:flex;font-size:16px;font-weight:600;color:#555}
+.langs span{padding:0 18px;border-left:1px solid #333}
+.langs span:first-child{border-left:0;color:#fff}
+.btn{background:var(--red);color:#fff;font-weight:700;padding:14px 38px;border-radius:12px;font-size:16px;display:inline-block}
+.btn:hover{filter:brightness(1.1)}
+.dots{width:48px;height:48px;border-radius:12px;background:#2a2a2a;display:grid;place-items:center}
+.dots i{display:grid;grid-template-columns:4px 4px;gap:6px}
+.dots i b{width:4px;height:4px;background:#bbb;border-radius:50%}
+
+/* Hero */
+.hero{background:#000;color:#fff;position:relative;padding:60px 0 0;min-height:760px}
+.hero-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;position:relative}
+.hero-text{padding:40px 0 0 120px;position:relative}
+.hero h1{font-size:clamp(48px,6vw,84px);line-height:1.08;font-weight:700;letter-spacing:-1px}
+.hero h1 .hop{color:var(--red)}
+.hero p{margin-top:36px;font-size:17px;line-height:1.5;max-width:420px}
+.plus{position:absolute;font-weight:800;font-size:64px;line-height:1}
+.plus.y{color:var(--yellow);top:-30px;right:40px;transform:rotate(15deg)}
+.plus.w{color:#fff;left:20px;top:280px;transform:rotate(-10deg)}
+.scroll-ind{position:absolute;left:120px;top:600px;width:216px;height:216px;border-radius:50%;border:1px solid var(--yellow);display:grid;place-items:center;z-index:3}
+.scroll-ind::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid #000;clip-path:inset(56% 0 0 0)}
+.scroll-ind span{width:116px;height:116px;border-radius:50%;border:1px solid #fff;display:grid;place-items:center;font-size:30px}
+.hero-grid>*,.chat-grid>*{min-width:0}
+.cards{display:flex;gap:24px;position:relative;z-index:2;overflow:hidden;padding-right:0}
+.card{flex:0 0 384px;height:512px;border-radius:22px;overflow:hidden;position:relative}
+.card svg{width:100%;height:100%;display:block}
+.stripes{position:absolute;right:0;bottom:-80px;width:56%;height:420px;z-index:1;pointer-events:none}
+.stripes i{position:absolute;bottom:0;width:90px;height:100%;background:var(--red);transform:skewX(-28deg)}
+.hero-bottom{height:80px}
+
+/* Sections */
+section.light{padding:200px 0 100px}
+.big{font-size:clamp(32px,4vw,52px);font-weight:700;line-height:1.2;max-width:1000px;padding-left:120px}
+.big .r{color:var(--red)}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px;padding-left:120px}
+.feat{background:#fff;border-radius:20px;padding:32px;box-shadow:0 2px 14px rgba(0,0,0,.05)}
+.feat .num{font-size:44px;font-weight:800;color:var(--red)}
+.feat h3{margin:8px 0 10px;font-size:20px}
+.feat p{color:#555;line-height:1.5;font-size:15px}
+
+/* Chatbot */
+.chat{background:#000;color:#fff;padding:90px 0;position:relative;overflow:hidden}
+.chat-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:56px;align-items:start}
+.chat h2{font-size:clamp(34px,4vw,56px);line-height:1.1}
+.chat h2 .hop{color:var(--red)}
+.chat p{margin-top:20px;color:#ccc;line-height:1.6;max-width:460px}
+.chat ul{margin-top:24px;list-style:none;color:#ddd}
+.chat li{padding:8px 0}
+.chat li::before{content:"+ ";color:var(--yellow);font-weight:800}
+.chat-box{background:#fff;color:#111;border-radius:22px;min-height:560px;padding:12px;position:relative}
+.chat-box .hint{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#888;font-size:14px;padding:24px;pointer-events:none;z-index:0}
+#buzzeasy-webchat{position:relative;z-index:1;min-height:536px}
+
+footer{background:#0b0b0b;color:#888;padding:40px 0;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+footer .logo{color:#fff;font-size:30px}
+
+@media (max-width:1100px){
+ .menu{display:none}
+ .hero-grid,.chat-grid{grid-template-columns:1fr}
+ .hero-text,.big,.features{padding-left:0}
+ .scroll-ind,.plus.w{display:none}
+ .card{flex-basis:300px;height:400px}
+ .features{grid-template-columns:1fr}
+ section.light{padding:100px 0 60px}
+}
+@media (max-width:640px){
+ .wrap{padding:0 16px}
+ .langs{display:none}
+ .nav{height:72px}.logo{font-size:36px}
+ .btn{padding:12px 20px;font-size:14px}
+ .card{flex-basis:260px;height:340px}
+ .stripes{width:100%;height:260px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="wrap nav">
+  <a href="#" class="logo">hop</a>
+  <nav class="menu">
+   <a href="#hakkimizda">Hakkımızda</a>
+   <a href="#hakkimizda">Lokasyonlar</a>
+   <a href="#asistan">Nasıl Kullanırım?</a>
+   <a href="#hakkimizda">Araçlarımız</a>
+  </nav>
+  <div class="right">
+   <div class="langs"><span>TR</span><span>EN</span><span>ME</span><span>GR</span></div>
+   <a href="#asistan" class="btn">Hemen İndir</a>
+   <div class="dots"><i><b></b><b></b><b></b><b></b></i></div>
+  </div>
+ </div>
+</header>
+
+<section class="hero">
+ <div class="wrap hero-grid">
+  <div class="hero-text">
+   <span class="plus y">+</span>
+   <span class="plus w">+</span>
+   <h1><span class="hop">hop</span> ile<br>Şehrin<br>Keyfini Sür</h1>
+   <p>Paylaşımlı elektrikli araçlar ile sürdürülebilir bir dünya için değişime sen de katıl.</p>
+  </div>
+  <div class="cards">
+   <!-- Kart 1: sahil -->
+   <div class="card"><svg viewBox="0 0 384 512" preserveAspectRatio="xMidYMid slice">
+    <defs><linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d8fd6"/><stop offset="1" stop-color="#a8d4f2"/></linearGradient></defs>
+    <rect width="384" height="512" fill="url(#s1)"/>
+    <g fill="#cfd8e0"><rect x="20" y="230" width="22" height="70"/><rect x="48" y="210" width="18" height="90"/><rect x="72" y="240" width="26" height="60"/><rect x="230" y="220" width="20" height="80"/><rect x="256" y="200" width="24" height="100"/><rect x="286" y="235" width="30" height="65"/><rect x="322" y="215" width="18" height="85"/></g>
+    <rect y="295" width="384" height="45" fill="#2f7fb5"/>
+    <rect y="340" width="384" height="172" fill="#e9dcc0"/>
+    <g transform="translate(120 170)"><circle cx="70" cy="20" r="18" fill="#7a4a2b"/><path d="M58 40 h26 l8 70 h-42z" fill="#2bb5d8"/><path d="M52 110 h42 l6 40 h-54z" fill="#f2b6d0"/><path d="M60 150 l-8 90 M86 150 l14 88" stroke="#e8c8a8" stroke-width="12" stroke-linecap="round"/>
+     <path d="M30 70 l40 -8" stroke="#e8c8a8" stroke-width="9" stroke-linecap="round"/></g>
+    <g stroke="#111" fill="none" stroke-width="7" stroke-linecap="round"><path d="M135 240 l25 190"/><path d="M120 240 h40"/><path d="M160 430 h110"/></g>
+    <rect x="150" y="300" width="18" height="120" rx="6" fill="#e8202a" transform="rotate(-7 159 360)"/>
+    <circle cx="165" cy="440" r="26" fill="#222" stroke="#e8202a" stroke-width="6"/><circle cx="275" cy="440" r="26" fill="#222" stroke="#e8202a" stroke-width="6"/>
+    <text x="210" y="425" fill="#fff" font-family="Sora" font-size="13" font-weight="700">hop</text>
+   </svg></div>
+   <!-- Kart 2: şehir -->
+   <div class="card"><svg viewBox="0 0 384 512" preserveAspectRatio="xMidYMid slice">
+    <defs><linearGradient id="s2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a6fb8"/><stop offset="1" stop-color="#9fc7e8"/></linearGradient></defs>
+    <rect width="384" height="512" fill="url(#s2)"/>
+    <g fill="#3c7a3a"><circle cx="40" cy="300" r="40"/><circle cx="340" cy="290" r="50"/><circle cx="300" cy="310" r="35"/></g>
+    <rect y="320" width="384" height="192" fill="#5a5a5a"/>
+    <g fill="#eee"><rect x="0" y="380" width="384" height="14"/><rect x="0" y="420" width="384" height="14"/><rect x="0" y="460" width="384" height="14"/></g>
+    <g transform="translate(130 120)"><circle cx="60" cy="20" r="20" fill="#6b4a33"/><path d="M36 44 h48 l10 110 h-68z" fill="#efe9dc"/><path d="M46 154 l-40 80 M80 154 l20 130" stroke="#c9d6dc" stroke-width="18" stroke-linecap="round"/><path d="M84 70 l70 40" stroke="#efe9dc" stroke-width="12" stroke-linecap="round"/></g>
+    <g stroke="#111" fill="none" stroke-width="7" stroke-linecap="round"><path d="M290 220 l-30 200"/><path d="M275 222 h36"/><path d="M260 420 h-70"/></g>
+    <rect x="262" y="270" width="16" height="130" rx="6" fill="#e8202a" transform="rotate(9 270 335)"/>
+    <circle cx="190" cy="430" r="24" fill="#222" stroke="#e8202a" stroke-width="6"/><circle cx="262" cy="430" r="24" fill="#222" stroke="#e8202a" stroke-width="6"/>
+   </svg></div>
+   <!-- Kart 3 -->
+   <div class="card"><svg viewBox="0 0 384 512" preserveAspectRatio="xMidYMid slice">
+    <rect width="384" height="512" fill="#7fa86a"/>
+    <g fill="#4d7a3f"><circle cx="60" cy="80" r="70"/><circle cx="200" cy="40" r="80"/><circle cx="330" cy="100" r="70"/></g>
+    <g fill="#d8577f"><circle cx="90" cy="120" r="8"/><circle cx="230" cy="70" r="7"/><circle cx="300" cy="140" r="9"/><circle cx="150" cy="60" r="6"/></g>
+    <rect y="360" width="384" height="152" fill="#bfb8ad"/>
+    <g transform="translate(150 150)"><circle cx="40" cy="20" r="20" fill="#d9b26b"/><path d="M14 44 h52 l8 120 h-68z" fill="#8aa3d6"/><path d="M20 164 l-6 140 M58 164 l8 140" stroke="#111" stroke-width="18" stroke-linecap="round"/></g>
+    <circle cx="100" cy="460" r="24" fill="#222" stroke="#e8202a" stroke-width="6"/>
+    <rect x="80" y="300" width="14" height="140" rx="6" fill="#e8202a"/>
+   </svg></div>
+  </div>
+ </div>
+ <div class="scroll-ind"><span>➤</span></div>
+ <div class="stripes"><i style="left:12%"></i><i style="left:37%"></i><i style="left:62%"></i><i style="left:87%"></i></div>
+ <div class="hero-bottom"></div>
+</section>
+
+<section class="light" id="hakkimizda">
+ <div class="wrap">
+  <h2 class="big">Çevre kirliliğine ve iklim değişikliğine karşı <span class="r">hop</span> ile şehirde yeni bir ulaşım deneyimi.</h2>
+  <div class="features">
+   <div class="feat"><div class="num">01</div><h3>Uygulamayı indir</h3><p>hop uygulamasını indir, hesabını birkaç adımda oluştur.</p></div>
+   <div class="feat"><div class="num">02</div><h3>Aracını bul</h3><p>Haritada sana en yakın scooter'ı bul ve QR kodu okut.</p></div>
+   <div class="feat"><div class="num">03</div><h3>Sür ve park et</h3><p>Yolculuğunun keyfini çıkar, izin verilen alana park edip sürüşü bitir.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="chat" id="asistan">
+ <div class="wrap chat-grid">
+  <div>
+   <h2><span class="hop">hop</span> Asistan'a<br>sor, hemen yanıtlasın</h2>
+   <p>Sürüş, ödeme, lokasyonlar ya da hesabınla ilgili merak ettiğin her şeyi sanal asistanımıza sorabilirsin.</p>
+   <ul>
+    <li>7/24 anında yanıt</li>
+    <li>Sürüş ve ödeme soruları</li>
+    <li>Lokasyon ve araç bilgisi</li>
+   </ul>
+  </div>
+  <div class="chat-box">
+   <div class="hint">Sohbet penceresi yükleniyor…<br>Görünmezse sağ alt köşedeki sohbet simgesine tıklayın.</div>
+   <div id="buzzeasy-webchat" data-webchat-url="https://api-prod.geomant.cloud/webchat/hub?tenantId=6882680ca57f1340e9d50dfb&channelId=2001079"></div>
+<script defer src="https://cdn.geomant.cloud/buzzeasy/webchatwidget.min.js"></script>
+  </div>
+ </div>
+</section>
+
+<footer>
+ <div class="wrap">
+  <span class="logo">hop</span>
+  <span>Chatbot demo sayfasıdır. Görseller temsilidir.</span>
+ </div>
+</footer>
+</body>
+</html>
