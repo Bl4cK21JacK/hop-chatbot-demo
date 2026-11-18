@@ -71,10 +71,13 @@ section.light{padding:200px 0 100px}
 .chat ul{margin-top:24px;list-style:none;color:#ddd}
 .chat li{padding:8px 0}
 .chat li::before{content:"+ ";color:var(--yellow);font-weight:800}
-.chat-box{background:#fff;color:#111;border-radius:22px;min-height:560px;padding:12px;position:relative}
-.chat-box .hint{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#888;font-size:14px;padding:24px;pointer-events:none;z-index:0}
-#buzzeasy-webchat{position:relative;z-index:1;min-height:536px}
-
+.chat-box{background:#fff;color:#111;border-radius:22px;padding:48px;text-align:center}
+.chat-box .cta-icon{font-size:56px}
+.chat-box h3{font-size:28px;margin:16px 0 12px}
+.chat-box p{color:#555;margin:0 auto;max-width:380px}
+/* Chatbot her zaman en önde */
+#buzzeasy-webchat{position:relative;z-index:2147483000}
+[id*="buzzeasy" i],[class*="buzzeasy" i],[id*="webchat" i],[class*="webchat" i],body>iframe{z-index:2147483000 !important}
 footer{background:#0b0b0b;color:#888;padding:40px 0;font-size:14px}
 footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
 footer .logo{color:#fff;font-size:30px}
@@ -192,9 +195,9 @@ footer .logo{color:#fff;font-size:30px}
    </ul>
   </div>
   <div class="chat-box">
-   <div class="hint">Sohbet penceresi yükleniyor…<br>Görünmezse sağ alt köşedeki sohbet simgesine tıklayın.</div>
-   <div id="buzzeasy-webchat" data-webchat-url="https://api-prod.geomant.cloud/webchat/hub?tenantId=6882680ca57f1340e9d50dfb&channelId=2001079"></div>
-<script defer src="https://cdn.geomant.cloud/buzzeasy/webchatwidget.min.js"></script>
+   <div class="cta-icon">💬</div>
+   <h3>Asistanımız burada</h3>
+   <p>Ekranın köşesindeki sohbet simgesine tıklayarak hop Asistan ile hemen konuşmaya başlayabilirsin.</p>
   </div>
  </div>
 </section>
@@ -205,5 +208,8 @@ footer .logo{color:#fff;font-size:30px}
   <span>Chatbot demo sayfasıdır. Görseller temsilidir.</span>
  </div>
 </footer>
+<!-- Buzzeasy webchat: body'nin doğrudan altında, hiçbir stacking context içinde değil -->
+<div id="buzzeasy-webchat" data-webchat-url="https://api-prod.geomant.cloud/webchat/hub?tenantId=6882680ca57f1340e9d50dfb&channelId=2001079"></div>
+<script defer src="https://cdn.geomant.cloud/buzzeasy/webchatwidget.min.js"></script>
 </body>
 </html>
